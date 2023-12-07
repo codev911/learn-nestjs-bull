@@ -4,12 +4,34 @@ import { Queue } from 'bull';
 
 @Controller('bull')
 export class BullController {
-  constructor(@InjectQueue('audio') private readonly audioQueue: Queue) {}
+  constructor(@InjectQueue('blockchain') private readonly blockchainQueue: Queue) {}
 
-  @Post('transcode')
+  @Post('multicall')
   async transcode() {
-    await this.audioQueue.add('transcode', {
-      file: 'audio.mp3',
-    });
+    const queue = [];
+
+    for (let index = 0; index < 5; index++) {
+      queue.push(
+        this.blockchainQueue.add(
+          'faucet',
+          {
+            wallets: [
+              '0xE018554a4FdC054e3f57d90e2d764a86A4486B79',
+              '0xE018554a4FdC054e3f57d90e2d764a86A4486B79'
+            ],
+            amount: 0.01
+          },
+          {
+            delay: 500
+          }
+        )
+      )
+    }
+
+    await Promise.all(queue);
+
+    return {
+      process: true
+    }
   }
 }

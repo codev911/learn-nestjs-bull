@@ -4,6 +4,7 @@ import { BullModule } from '@nestjs/bull';
 
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
+import { BullsModule } from './bull/bull.module';
 
 @Module({
   imports: [
@@ -11,11 +12,10 @@ import { AppService } from './app.service';
     BullModule.forRoot({
       redis: {
         host: process.env.REDIS_HOST,
-        port: parseInt(process.env.REDIS_PORT),
-        password: process.env.REDIS_PASSWORD,
+        port: parseInt(process.env.REDIS_PORT)
       },
     }),
-
+    BullsModule
   ],
   controllers: [AppController],
   providers: [AppService],
