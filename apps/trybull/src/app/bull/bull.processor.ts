@@ -13,8 +13,7 @@ export class BullProcessor {
         process.env.BC_RPC,
     );
     private signer: ethers.Wallet = new ethers.Wallet(
-        process.env.BC_PRIVATE_KEY,
-        this.provider
+        process.env.BC_PRIVATE_KEY
     ).connect(this.provider);
     private contract: ethers.Contract = new ethers.Contract(
         process.env.BC_AIRDROP_CONTRACT,
