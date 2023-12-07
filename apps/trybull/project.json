@@ -1,0 +1,57 @@
+{
+  "name": "trybull",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "apps/trybull/src",
+  "projectType": "application",
+  "targets": {
+    "build": {
+      "executor": "@nx/webpack:webpack",
+      "outputs": ["{options.outputPath}"],
+      "defaultConfiguration": "production",
+      "options": {
+        "target": "node",
+        "compiler": "tsc",
+        "outputPath": "dist/apps/trybull",
+        "main": "apps/trybull/src/main.ts",
+        "tsConfig": "apps/trybull/tsconfig.app.json",
+        "assets": ["apps/trybull/src/assets"],
+        "isolatedConfig": true,
+        "webpackConfig": "apps/trybull/webpack.config.js"
+      },
+      "configurations": {
+        "development": {},
+        "production": {}
+      }
+    },
+    "serve": {
+      "executor": "@nx/js:node",
+      "defaultConfiguration": "development",
+      "options": {
+        "buildTarget": "trybull:build"
+      },
+      "configurations": {
+        "development": {
+          "buildTarget": "trybull:build:development"
+        },
+        "production": {
+          "buildTarget": "trybull:build:production"
+        }
+      }
+    },
+    "lint": {
+      "executor": "@nx/eslint:lint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": ["apps/trybull/**/*.ts"]
+      }
+    },
+    "test": {
+      "executor": "@nx/jest:jest",
+      "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
+      "options": {
+        "jestConfig": "apps/trybull/jest.config.ts"
+      }
+    }
+  },
+  "tags": []
+}
