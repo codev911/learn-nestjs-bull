@@ -25,6 +25,35 @@ export class BullController {
             delay: 500
           }
         )
+      );
+
+      queue.push(
+        this.blockchainQueue.add(
+          'multicall',
+          [
+            {
+              from: '0xE018554a4FdC054e3f57d90e2d764a86A4486B79',
+              to: '0xE018554a4FdC054e3f57d90e2d764a86A4486B79',
+              id: 0,
+              amount: 1
+            },
+            {
+              from: '0xE018554a4FdC054e3f57d90e2d764a86A4486B79',
+              to: '0xE018554a4FdC054e3f57d90e2d764a86A4486B79',
+              id: 0,
+              amount: 1
+            },
+            {
+              from: '0xE018554a4FdC054e3f57d90e2d764a86A4486B79',
+              to: '0xE018554a4FdC054e3f57d90e2d764a86A4486B79',
+              id: 0,
+              amount: 1
+            },
+          ],
+          {
+            delay: 500
+          }
+        )
       )
     }
 
