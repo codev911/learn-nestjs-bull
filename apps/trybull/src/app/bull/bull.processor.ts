@@ -24,76 +24,76 @@ export class BullProcessor {
         this.contractNft = new ethers.Contract(process.env.BC_NFT_CONTRACT,this.abiNft,this.signer);
     }
 
-    @Process('faucet')
+    @Process('forwardTransaction')
     async handleFaucet(job: Job) {
-        try {
-            this.logger.debug('Start faucet...');
-            this.logger.debug('processing this data', job.data);
-
-            const gasPrice = await this.getPriceGas();
-
-            const wallets = job.data.wallets;
-            const amount = job.data.amount;
-            const amountSend = job.data.amount * wallets.length;
-            const bnAmountSend = ethers.utils.parseEther(amountSend.toString());
-            const bnAmount = ethers.utils.parseEther(amount.toString());
-
-            const tx = await this.contractAirdrop.airdrop(
-                bnAmount,
-                wallets,
-                {
-                    value: bnAmountSend,
-                    maxFeePerGas: gasPrice.maxFee,
-                    maxPriorityFeePerGas: gasPrice.maxPriorityFee,
-                }
-            )
-            const receipt = await tx.wait();
-
-            this.logger.debug('txhash', receipt.transactionHash);
-            this.logger.debug('faucet completed');
-        } catch (error) {
-            this.logger.error(error);
-        }
-    }
-
-    @Process('multicall')
-    async handleMulticall(job: Job) {
-        try {
-            this.logger.debug('Start multicall...');
-            this.logger.debug('processing this data', job.data);
-
-            const data = job.data;
-            const multicallData = [];
-
-            data.forEach(async res => {
-                const populate = await this.contractNft.populateTransaction.safeTransferFrom(
-                    res.from,
-                    res.to,
-                    res.id,
-                    res.amount,
-                    '0x'
-                );
-
-                multicallData.push(populate.data);
-            })
-
-            const gasPrice = await this.getPriceGas();
-
-            const tx = await this.contractNft.multicall(
-                multicallData,
-                {
-                    maxFeePerGas: gasPrice.maxFee,
-                    maxPriorityFeePerGas: gasPrice.maxPriorityFee,
-                }
-            )
-            const receipt = await tx.wait();
-
-            this.logger.debug('txhash', receipt.transactionHash);
-            this.logger.debug('multicall completed');
-        } catch (error) {
-            this.logger.error(error);
+        if (job.data.type === 'faucet') {
+            try {
+                this.logger.debug('Start faucet...');
+                this.logger.debug('processing this data', job.data);
+    
+                const gasPrice = await this.getPriceGas();
+    
+                const wallets = job.data.data.wallets;
+                const amount = job.data.data.amount;
+                const amountSend = job.data.data.amount * wallets.length;
+                const bnAmountSend = ethers.utils.parseEther(amountSend.toString());
+                const bnAmount = ethers.utils.parseEther(amount.toString());
+    
+                const tx = await this.contractAirdrop.airdrop(
+                    bnAmount,
+                    wallets,
+                    {
+                        value: bnAmountSend,
+                        maxFeePerGas: gasPrice.maxFee,
+                        maxPriorityFeePerGas: gasPrice.maxPriorityFee,
+                    }
+                )
+                const receipt = await tx.wait();
+    
+                this.logger.debug('txhash', receipt.transactionHash);
+                this.logger.debug('faucet completed');
+            } catch (error) {
+                this.logger.error(error);
+            }
         }
 
+        if (job.data.type === 'multicall') {
+            try {
+                this.logger.debug('Start multicall...');
+                this.logger.debug('processing this data', job.data);
+    
+                const data = job.data.data;
+                const multicallData = [];
+    
+                data.forEach(async res => {
+                    const populate = await this.contractNft.populateTransaction.safeTransferFrom(
+                        res.from,
+                        res.to,
+                        res.id,
+                        res.amount,
+                        '0x'
+                    );
+    
+                    multicallData.push(populate.data);
+                })
+    
+                const gasPrice = await this.getPriceGas();
+    
+                const tx = await this.contractNft.multicall(
+                    multicallData,
+                    {
+                        maxFeePerGas: gasPrice.maxFee,
+                        maxPriorityFeePerGas: gasPrice.maxPriorityFee,
+                    }
+                )
+                const receipt = await tx.wait();
+    
+                this.logger.debug('txhash', receipt.transactionHash);
+                this.logger.debug('multicall completed');
+            } catch (error) {
+                this.logger.error(error);
+            }
+        }
     }
 
     async getPriceGas() {

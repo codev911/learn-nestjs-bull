@@ -13,13 +13,16 @@ export class BullController {
     for (let index = 0; index < 5; index++) {
       queue.push(
         this.blockchainQueue.add(
-          'faucet',
+          'forwardTransaction',
           {
-            wallets: [
-              '0xE018554a4FdC054e3f57d90e2d764a86A4486B79',
-              '0xE018554a4FdC054e3f57d90e2d764a86A4486B79'
-            ],
-            amount: 0.01
+            type: 'faucet',
+            data: {
+              wallets: [
+                '0xE018554a4FdC054e3f57d90e2d764a86A4486B79',
+                '0xE018554a4FdC054e3f57d90e2d764a86A4486B79'
+              ],
+              amount: 0.01
+            }
           },
           {
             delay: 2000
@@ -29,27 +32,30 @@ export class BullController {
 
       queue.push(
         this.blockchainQueue.add(
-          'multicall',
-          [
-            {
-              from: '0xE018554a4FdC054e3f57d90e2d764a86A4486B79',
-              to: '0xE018554a4FdC054e3f57d90e2d764a86A4486B79',
-              id: 0,
-              amount: 1
-            },
-            {
-              from: '0xE018554a4FdC054e3f57d90e2d764a86A4486B79',
-              to: '0xE018554a4FdC054e3f57d90e2d764a86A4486B79',
-              id: 0,
-              amount: 1
-            },
-            {
-              from: '0xE018554a4FdC054e3f57d90e2d764a86A4486B79',
-              to: '0xE018554a4FdC054e3f57d90e2d764a86A4486B79',
-              id: 0,
-              amount: 1
-            },
-          ],
+          'forwardTransaction',
+          {
+            type: 'multicall',
+            data: [
+              {
+                from: '0xE018554a4FdC054e3f57d90e2d764a86A4486B79',
+                to: '0xE018554a4FdC054e3f57d90e2d764a86A4486B79',
+                id: 0,
+                amount: 1
+              },
+              {
+                from: '0xE018554a4FdC054e3f57d90e2d764a86A4486B79',
+                to: '0xE018554a4FdC054e3f57d90e2d764a86A4486B79',
+                id: 0,
+                amount: 1
+              },
+              {
+                from: '0xE018554a4FdC054e3f57d90e2d764a86A4486B79',
+                to: '0xE018554a4FdC054e3f57d90e2d764a86A4486B79',
+                id: 0,
+                amount: 1
+              },
+            ]
+          },
           {
             delay: 2000
           }
