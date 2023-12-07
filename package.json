@@ -15,7 +15,8 @@
     "bull": "^4.11.5",
     "reflect-metadata": "^0.1.13",
     "rxjs": "^7.8.0",
-    "tslib": "^2.3.0"
+    "tslib": "^2.3.0",
+    "uuid": "^9.0.1"
   },
   "devDependencies": {
     "@nestjs/schematics": "^10.0.1",
