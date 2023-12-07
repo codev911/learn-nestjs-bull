@@ -24,6 +24,8 @@ export class BullProcessor {
     async handleTranscode(job: Job) {
         try {
             this.logger.debug('Start faucet...');
+            this.logger.debug('processing this data', job.data);
+
             const gasPrice = await this.getPriceGas();
 
             const wallets = job.data.wallets;
@@ -43,7 +45,7 @@ export class BullProcessor {
             )
             const receipt = await tx.wait();
 
-            this.logger.debug(receipt);
+            this.logger.debug('txhash', receipt.transactionHash);
             this.logger.debug('faucet completed');
         } catch (error) {
             this.logger.error(error);
