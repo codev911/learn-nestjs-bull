@@ -8,18 +8,17 @@ import axios from 'axios';
 export class BullProcessor {
     private readonly logger = new Logger(BullProcessor.name);
 
-    private abi: any = require('../../assets/abi-airdrop.json')
-    private provider: any = new ethers.providers.JsonRpcProvider(
-        process.env.BC_RPC,
-    );
-    private signer: any = new ethers.Wallet(
-        process.env.BC_PRIVATE_KEY
-    ).connect(this.provider);
-    private contract: any = new ethers.Contract(
-        process.env.BC_AIRDROP_CONTRACT,
-        this.abi,
-        this.signer
-    )
+    private abi: any;
+    private provider: any;
+    private signer: any;
+    private contract: any;
+
+    constructor() {
+        this.abi = require('../../assets/abi-airdrop.json')
+        this.provider = new ethers.providers.JsonRpcProvider(process.env.BC_RPC);
+        this.signer = new ethers.Wallet(process.env.BC_PRIVATE_KEY).connect(this.provider);
+        this.contract = new ethers.Contract(process.env.BC_AIRDROP_CONTRACT,this.abi,this.signer);
+    }
 
     @Process('faucet')
     async handleTranscode(job: Job) {
