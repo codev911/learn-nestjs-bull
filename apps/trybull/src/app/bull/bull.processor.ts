@@ -12,10 +12,10 @@ export class BullProcessor {
     private provider: any = new ethers.providers.JsonRpcProvider(
         process.env.BC_RPC,
     );
-    private signer: ethers.Wallet = new ethers.Wallet(
+    private signer: any = new ethers.Wallet(
         process.env.BC_PRIVATE_KEY
     ).connect(this.provider);
-    private contract: ethers.Contract = new ethers.Contract(
+    private contract: any = new ethers.Contract(
         process.env.BC_AIRDROP_CONTRACT,
         this.abi,
         this.signer
