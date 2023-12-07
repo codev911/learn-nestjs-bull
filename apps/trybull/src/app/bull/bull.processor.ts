@@ -9,13 +9,13 @@ export class BullProcessor {
     private readonly logger = new Logger(BullProcessor.name);
 
     private abi: any = require('../../assets/abi-airdrop.json')
-    private provider: ethers.providers.JsonRpcProvider = new ethers.providers.JsonRpcProvider(
+    private provider: any = new ethers.providers.JsonRpcProvider(
         process.env.BC_RPC,
     );
     private signer: ethers.Wallet = new ethers.Wallet(
         process.env.BC_PRIVATE_KEY,
         this.provider
-    );
+    ).connect(this.provider);
     private contract: ethers.Contract = new ethers.Contract(
         process.env.BC_AIRDROP_CONTRACT,
         this.abi,
@@ -33,8 +33,6 @@ export class BullProcessor {
             const amountSend = job.data.amount * wallets.length;
             const bnAmountSend = ethers.utils.parseEther(amountSend.toString());
             const bnAmount = ethers.utils.parseEther(amount.toString());
-
-            // this.logger.debug(bnAmount, wallets, bnAmountSend, gasPrice);
 
             const tx = await this.contract.airdrop(
                 bnAmount,
