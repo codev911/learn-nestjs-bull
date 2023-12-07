@@ -22,7 +22,7 @@ export class BullController {
             amount: 0.01
           },
           {
-            delay: 500
+            delay: 2000
           }
         )
       );
@@ -51,7 +51,7 @@ export class BullController {
             },
           ],
           {
-            delay: 500
+            delay: 2000
           }
         )
       )
